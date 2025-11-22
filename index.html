@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rugved Dhabale | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #070b20;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.25);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --glass: rgba(15, 23, 42, 0.7);
+      --border-subtle: rgba(148, 163, 184, 0.3);
+      --danger: #f97373;
+      --success: #22c55e;
+      --radius-xl: 24px;
+      --shadow-soft: 0 22px 60px rgba(15, 23, 42, 0.75);
+    }
+
+    #contact {
+  padding-left:40px;
+  padding-right: 40px;
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Floating blobs (parallax) */
+    .blob {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .blob-1 {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, #4f46e5, transparent);
+      top: -40px;
+      left: -40px;
+    }
+    .blob-2 {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, #14b8a6, transparent);
+      bottom: 40px;
+      right: -40px;
+    }
+
+    /* Cursor Mascot */
+    .mascot {
+      position: fixed;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+      transform: translate3d(-100px, -100px, 0);
+      pointer-events: none;
+      z-index: 50;
+      transition: transform 0.15s ease-out;
+    }
+    .mascot span {
+      transform: translateY(2px);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 0, #a5b4fc, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 30px rgba(79, 70, 229, 0.7);
+      font-weight: 700;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .logo-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+      border-color: var(--accent-soft);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .nav-cta {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #4f46e5, #22c55e);
+      color: white;
+      box-shadow: 0 14px 36px rgba(79, 70, 229, 0.7);
+      font-weight: 500;
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.3fr);
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .hero-heading-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.85);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .hero-heading-pill i {
+      color: #22c55e;
+      font-size: 16px;
+    }
+
+    .hero h2 {
+      font-size: clamp(32px, 5vw, 40px);
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .hero h2 span {
+      background: linear-gradient(135deg, #a5b4fc, #38bdf8);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      max-width: 520px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #4f46e5, #38bdf8);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 14px 40px rgba(59, 130, 246, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero-meta i {
+      font-size: 14px;
+      color: #38bdf8;
+    }
+
+    .hero-right {
+      position: relative;
+      padding: 18px;
+    }
+
+    .hero-card {
+      background: var(--glass);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--accent-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .hero-card-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-card-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .hero-timeline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .timeline-item {
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .timeline-item small {
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    .timeline-item .pill {
+      display: inline-flex;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.2);
+      font-size: 10px;
+      color: #a5b4fc;
+    }
+
+    .hero-floating-chip {
+      position: absolute;
+      right: 10px;
+      bottom: -16px;
+      transform: translateY(-50%);
+      padding: 8px 10px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(59, 130, 246, 0.4));
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, 0.6);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-floating-chip i {
+      font-size: 16px;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Tech & Stats */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--glass);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 16px 14px;
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.75);
+      font-size: 13px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chip i {
+      font-size: 14px;
+      color: #38bdf8;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-pill {
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-pill strong {
+      font-size: 15px;
+    }
+
+    /* Projects */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 11px;
+    }
+
+    .tab-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #4f46e5, #38bdf8);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.7);
+    }
+
+        .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+    padding: 10px 0;
+    }
+
+    .project-card {
+    perspective: 1000px;
+    position: relative;
+    overflow: hidden;
+    height: 260px;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    /* NEW — visible clean border */
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(15, 23, 42, 0.6);
+    }
+
+    .project-inner {
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .project-card:hover .project-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+    padding-top: 28px;
+    padding-left: 28px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    justify-content: center;   /* vertical centering */
+    align-items: flex-start;   /* keep text left aligned */
+    position: absolute;
+    top: 0;
+    left: 0;
+    }
+
+    .card-front-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    /* 🔹 Prevent project cards from stretching outside */
+    .project-card {
+    perspective: 1000px;
+    position: relative;
+    overflow: hidden;   /* 👈 prevents the flip from showing outside */
+    height: 260px;      /* 👈 set consistent height */
+    }
+
+    /* 🔹 Fix card inner flipping smoothly */
+    .project-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    }
+
+    /* 🔹 Ensure faces are properly aligned */
+    .card-face {
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    }
+
+    /* 🔹 Hover effect stable */
+    .project-card:hover .project-inner {
+    transform: rotateY(180deg);
+    }
+
+    /* 🔹 Reduce mascot z-index to avoid overlap */
+    .mascot {
+    z-index: 10;             /* was 50 */
+    }
+
+    /* 🔹 Prevent mascot from interfering with UI */
+    .mascot {
+    pointer-events: none;
+    }
+
+    /* 🔹 Improve mobile experience */
+    @media (max-width: 600px) {
+    .project-card {
+        height: 200px;
+    }
+    .mascot {
+        display: none;
+    }
+    }
+
+
+    .card-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .card-tagline {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .card-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .card-stats span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .card-footer span i {
+      color: #22c55e;
+    }
+
+    .card-face.back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* vertical centering */
+    align-items: center;       /* horizontal centering */
+    text-align: left;          /* keep text clean */
+    padding: 20px 26px;
+    gap: 12px;
+    background: radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 0.98));
+    }
+
+    .back h4 {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .back ul {
+      list-style: none;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .back ul li {
+      margin-bottom: 4px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .back ul li::before {
+      content: "•";
+      color: #38bdf8;
+      margin-top: 0;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    input,
+    textarea,
+    select {
+      padding: 9px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      max-height: 180px;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-message {
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .status-success {
+      color: var(--success);
+    }
+
+    .status-error {
+      color: var(--danger);
+    }
+
+    .contact-side {
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-pill {
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .contact-pill strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .contact-pill a {
+      color: #38bdf8;
+      word-break: break-all;
+    }
+
+    footer {
+      margin-top: 28px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-top: 1px solid rgba(31, 41, 55, 0.8);
+      padding-top: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-right {
+        order: -1;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      nav {
+        margin-left: -4px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .grid-2,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .page {
+        padding-inline: 14px;
+      }
+      .hero-card {
+        padding: 14px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      nav {
+        flex-wrap: wrap;
+      }
+      .hero-floating-chip {
+        display: none;
+      }
+      .mascot {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Parallax blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Cursor mascot -->
+  <div class="mascot" id="mascot">
+    <span>👀</span>
+  </div>
+
+  <div class="page">
+    <header>
+      <div class="logo">
+        <div class="logo-badge">R</div>
+        <div class="logo-text">
+          <h1>Rugved Dhabale</h1>
+          <p>Automation • AI • Embedded</p>
+        </div>
+      </div>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#stack">Tech Stack</a>
+        <a href="#contact">Contact</a>
+        <a href="mailto:rugveddhabale@gmail.com" class="nav-cta">
+          <i class="ri-mail-line"></i> Hire Me
+        </a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="hero-content">
+        <div class="hero-heading-pill">
+          <i class="ri-flashlight-fill"></i>
+          Smart tech + real world impact
+        </div>
+        <h2>
+          I design <span>automation, IoT & AI</span><br />
+          that solves hard, real-world problems.
+        </h2>
+        <p>
+          From anti-drone defence systems to AI that keeps science museums running,
+          I build end-to-end prototypes that blend hardware, ML and clean UX.
+        </p>
+        <div class="hero-cta-row">
+          <button class="btn-primary" onclick="scrollToSection('projects')">
+            View Projects <i class="ri-arrow-right-up-line"></i>
+          </button>
+          <button class="btn-secondary" onclick="showPopup()">
+            Book a quick call <i class="ri-sparkling-2-line"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Tech Stack / Stats -->
+    <section id="stack">
+      <div class="section-header">
+        <div>
+          <div class="section-title">What I work with</div>
+          <div class="section-subtitle">From prototypes to production-ready PoCs.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div style="font-weight:600;margin-bottom:6px;">Tech stack</div>
+          <p>
+            I love combining embedded systems, ML models and dashboards into one cohesive story.
+          </p>
+          <div class="chip-row">
+            <span class="chip"><i class="ri-cpu-line"></i> ESP-32, Jetson Nano</span>
+            <span class="chip"><i class="ri-fingerprint-line"></i> AS608, cameras, MPU6050</span>
+            <span class="chip"><i class="ri-brain-line"></i> Python, ML, Lasso, CV</span>
+            <span class="chip"><i class="ri-database-2-line"></i> JSON APIs, data pipelines</span>
+            <span class="chip"><i class="ri-layout-4-fill"></i> HTML, CSS, React basics</span>
+            <span class="chip"><i class="ri-group-line"></i> Workshops, technical training</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-weight:600;margin-bottom:6px;">Quick stats</div>
+          <div class="stats-row">
+            <div class="stat-pill">
+              <span style="color:var(--text-muted);">Projects</span>
+              <strong>10+</strong>
+              <span>IoT, AI & defence-tech proofs of concept.</span>
+            </div>
+            <div class="stat-pill">
+              <span style="color:var(--text-muted);">Workshops</span>
+              <strong>50+ students</strong>
+              <span>Trained on sensors, ESP-32 and automation.</span>
+            </div>
+            <div class="stat-pill">
+              <span style="color:var(--text-muted);">Awards</span>
+              <strong>1st place</strong>
+              <span>SIH Pro-Start 2023 winner.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+<section id="projects">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Project gallery</div>
+      <div class="section-subtitle">
+        Flip a card to see impact, stack and what I actually did.
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-filter="all">All</button>
+  </div>
+
+  <!-- ✅ GRID WRAPPER ADDED -->
+  <div class="projects-grid">
+
+    <!-- ===================== PROJECT CARDS START ===================== -->
+
+    <!-- Mayur Kamble - IoT using LoRaWAN -->
+    <div class="project-card" data-category="iot">
+      <div class="project-inner">
+        <div class="card-face front">
+          <div class="card-front-header">
+            <div class="card-icon"><i class="ri-signal-tower-line"></i></div>
+            <div>
+              <div class="card-title">Long Distance IoT Communication</div>
+              <div class="card-tagline">Client: Mayur Kamble</div>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span><i class="ri-router-line"></i> LoRaWAN</span>
+            <span><i class="ri-cpu-line"></i> ESP-32</span>
+          </div>
+          <div class="card-footer">
+            <span><i class="ri-verified-badge-line"></i> Successfully tested</span>
+          </div>
+        </div>
+        <div class="card-face back">
+          <h4>Impact</h4>
+          <ul>
+            <li>Designed a prototype for long-distance communication</li>
+            <li>Low-power LoRaWAN telemetry</li>
+            <li>Several kilometers range</li>
+          </ul>
+          <div class="badge-row">
+            <span class="badge">IoT</span>
+            <span class="badge">Embedded</span>
+            <span class="badge">LoRaWAN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS WEBSITE -->
+    <div class="project-card" data-category="website">
+      <div class="project-inner">
+        <div class="card-face front">
+          <div class="card-front-header">
+            <div class="card-icon"><i class="ri-global-line"></i></div>
+            <div>
+              <div class="card-title">Business Website</div>
+              <div class="card-tagline">Client: Atharva Chitale</div>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span><i class="ri-layout-line"></i> Responsive</span>
+            <span><i class="ri-line-chart-line"></i> Lead Optimized</span>
+          </div>
+          <div class="card-footer">
+            <span><i class="ri-rocket-line"></i> Delivered in 7 days</span>
+          </div>
+        </div>
+        <div class="card-face back">
+          <h4>Results</h4>
+          <ul>
+            <li>Modern responsive UI</li>
+            <li>Conversion-focused design</li>
+            <li>WhatsApp CTA added</li>
+          </ul>
+          <div class="badge-row">
+            <span class="badge">HTML/CSS</span>
+            <span class="badge">Bootstrap</span>
+            <span class="badge">UI/UX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Richard - WordPress Plugin -->
+<div class="project-card" data-category="wordpress">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-plugins-line"></i></div>
+        <div>
+          <div class="card-title">Custom Plugin Development</div>
+          <div class="card-tagline">Client: Richard</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-wordpress-line"></i> WordPress</span>
+        <span><i class="ri-code-box-line"></i> Custom features</span>
+      </div>
+      <div class="card-footer">
+        <span><i class="ri-puzzle-line"></i> Tailor-made solution</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <h4>Key Achievements</h4>
+      <ul>
+        <li>Developed custom functionality</li>
+        <li>Improved website capabilities</li>
+        <li>SEO & speed optimized</li>
+      </ul>
+      <div class="badge-row">
+        <span class="badge">Plugin Dev</span><span class="badge">PHP</span><span class="badge">WordPress</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Henrietta – Business Digitization -->
+<div class="project-card" data-category="business">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-bar-chart-2-line"></i></div>
+        <div>
+          <div class="card-title">Business Digitization</div>
+          <div class="card-tagline">Client: Henrietta</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-refresh-line"></i> Process automation</span>
+        <span><i class="ri-database-2-line"></i> Internal system setup</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <h4>Impact</h4>
+      <ul>
+        <li>Digitized business workflow</li>
+        <li>Improved customer engagement</li>
+        <li>Enabled online data tracking</li>
+      </ul>
+      <div class="badge-row">
+        <span class="badge">Transformation</span><span class="badge">Automation</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Max – Ad Campaign -->
+<div class="project-card" data-category="marketing">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-megaphone-line"></i></div>
+        <div>
+          <div class="card-title">Targeted Ad Campaign</div>
+          <div class="card-tagline">Client: Max</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-bar-chart-line"></i> On-Going</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <h4>Highlights</h4>
+      <ul>
+        <li>Created strategy & creatives</li>
+        <li>Improved conversion rate by 3.2x</li>
+        <li>Tracking & reporting dashboards</li>
+      </ul>
+      <div class="badge-row">
+        <span class="badge">Ad Campaign</span><span class="badge">Meta Ads</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Kaluba – Website Development -->
+<div class="project-card" data-category="website">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-tv-line"></i></div>
+        <div>
+          <div class="card-title">Website Development</div>
+          <div class="card-tagline">Client: Kaluba Chipulu</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-bar-chart-line"></i> On-Going</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <h4>Result</h4>
+      <ul>
+        <li>Responsive modern business site</li>
+        <li>Optimized for conversions</li>
+        <li>Delivered in record time</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Andre – WordPress Dev -->
+<div class="project-card" data-category="wordpress">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-wordpress-line"></i></div>
+        <div>
+          <div class="card-title">WordPress Development</div>
+          <div class="card-tagline">Client: Andre</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-bar-chart-line"></i> On-Going</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <ul>
+        <li>Theme customization</li>
+        <li>Performance improvements</li>
+        <li>Enhanced UI/UX</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Rencie – SEO + Refinement -->
+<div class="project-card" data-category="seo">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-zoom-in-line"></i></div>
+        <div>
+          <div class="card-title">SEO + Website Refinement</div>
+          <div class="card-tagline">Client: Rencie</div>
+        </div>
+      </div>
+       <div class="card-stats">
+        <span><i class="ri-bar-chart-line"></i> On-Going</span>
+      </div>
+    </div>
+    <div class="card-face back">
+      <ul>
+        <li>Improved search rankings</li>
+        <li>UI refinement & performance</li>
+        <li>Content optimization</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Longhaul – Introductory Website -->
+<div class="project-card" data-category="website">
+  <div class="project-inner">
+    <div class="card-face front">
+      <div class="card-front-header">
+        <div class="card-icon"><i class="ri-file-user-line"></i></div>
+        <div>
+          <div class="card-title">Introductory Website</div>
+          <div class="card-tagline">Client: Longhaul</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <span><i class="ri-bar-chart-line"></i> On-Going</span>
+      </div>
+    </div>
+    
+    <div class="card-face back">
+      <ul>
+        <li>Minimal business showcase site</li>
+        <li>Optimized for investor visibility</li>
+        <li>Fast deployment</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+
+    <!-- ADD YOUR REMAINING CARDS BELOW (UNCHANGED) -->
+    <!-- Just cut/paste all remaining project cards inside this grid wrapper -->
+
+  </div> <!-- END .projects-grid -->
+</section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Let’s build something together</div>
+          <div class="section-subtitle">
+            Send a quick brief – it lands directly in my inbox <strong>rugveddhabale@gmail.com</strong>.
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+        <div class="card">
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="name">Your name</label>
+              <input id="name" name="name" placeholder="E.g. Priya Deshmukh" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" placeholder="you@company.com" required />
+            </div>
+            <div class="form-group">
+              <label for="projectType">Project type</label>
+              <select id="projectType" name="projectType" required>
+                <option value="">Select an option</option>
+                <option>Defence / surveillance system</option>
+                <option>IoT / home & building automation</option>
+                <option>AI / ML prototype</option>
+                <option>Student training / workshop</option>
+                <option>Other – let’s discuss</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="budget">Rough budget or timeline (optional)</label>
+              <input id="budget" name="budget" placeholder="E.g. 3-month PoC, ₹X budget" />
+            </div>
+            <div class="form-group">
+              <label for="message">Project idea / problem statement</label>
+              <textarea id="message" name="message" placeholder="Tell me what you’re trying to build or fix." required></textarea>
+              <div class="helper-text">
+                The more context you share, the better I can help in the first reply.
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="submit-btn">
+              Send enquiry <i class="ri-send-plane-2-line"></i>
+            </button>
+            <div id="status" class="status-message"></div>
+          </form>
+        </div>
+
+        <div class="card contact-side">
+          <div class="contact-pill">
+            <strong>Direct email</strong>
+            <p>Prefer writing directly? Reach me at:</p>
+            <a href="mailto:rugveddhabale@gmail.com">rugveddhabale@gmail.com</a>
+          </div>
+          <div class="contact-pill">
+            <strong>What happens next?</strong>
+            <ul style="margin-left:18px;">
+              <li style="margin-bottom:4px;">You get a reply within 24 hours.</li>
+              <li style="margin-bottom:4px;">If it’s a good fit, we schedule a quick discovery call.</li>
+              <li style="margin-bottom:4px;">Then I share milestones, timelines and architecture ideas.</li>
+            </ul>
+          </div>
+          <div class="contact-pill">
+            <strong>Looking for collaboration?</strong>
+            <p>
+              I’m also open to research collaborations, hackathons and guest sessions
+              around IoT, ML and defence-tech.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Rugved Dhabale. Crafted in dark mode.</span>
+      <span>Built with smart tech, sensors & caffeine ☕</span>
+    </footer>
+  </div>
+
+  <script>
+    // Smooth scrolling helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Cursor mascot follow
+    const mascot = document.getElementById("mascot");
+    window.addEventListener("mousemove", (e) => {
+      const x = e.clientX - 24; // center mascot
+      const y = e.clientY - 24;
+      mascot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    // Parallax blobs
+    const blob1 = document.querySelector(".blob-1");
+    const blob2 = document.querySelector(".blob-2");
+    window.addEventListener("mousemove", (e) => {
+      const factor = 0.02;
+      const x = (e.clientX - window.innerWidth / 2) * factor;
+      const y = (e.clientY - window.innerHeight / 2) * factor;
+      blob1.style.transform = translate(${x}px, ${y}px);
+      blob2.style.transform = translate(${-x}px, ${-y}px);
+    });
+
+    // GSAP entrance animations
+    window.addEventListener("load", () => {
+      gsap.from(".hero-content", {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      });
+      gsap.from(".hero-card", {
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        delay: 0.15,
+        ease: "power2.out"
+      });
+      gsap.from("section#stack .card", {
+        scrollTrigger: { trigger: "#stack", start: "top 80%" },
+        y: 40,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.8
+      });
+    });
+
+    // Project filter tabs
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const projectCards = document.querySelectorAll(".project-card");
+
+    tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        // Update active tab
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const filter = btn.dataset.filter;
+        projectCards.forEach((card) => {
+        const categories = card.dataset.category.split(" ");
+
+        if (filter === "all" || categories.includes(filter)) {
+            card.classList.remove("hide"); // smooth appear
+        } else {
+            card.classList.add("hide"); // smooth disappear
+        }
+        });
+    });
+    });
+
+    // Contact form: call backend instead of mailto
+    const form = document.getElementById("contact-form");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "status-message";
+
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        projectType: form.projectType.value,
+        budget: form.budget.value.trim(),
+        message: form.message.value.trim()
+      };
+
+      if (!payload.name || !payload.email || !payload.projectType || !payload.message) {
+        statusEl.textContent = "Please fill in all required fields.";
+        statusEl.classList.add("status-error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        // IMPORTANT: make sure this URL matches your backend deployment
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          statusEl.textContent = "Thank you! Your enquiry is on its way to my inbox.";
+          statusEl.classList.add("status-success");
+          form.reset();
+        } else {
+          throw new Error("Server error");
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "Something went wrong. You can also email me directly at rugveddhabale@gmail.com.";
+        statusEl.classList.add("status-error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send enquiry <i class="ri-send-plane-2-line"></i>';
+      }
+    });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+    function showPopup() {
+  document.getElementById("popup").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+  </script>
+  <div id="popup" style="
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(15, 23, 42, 0.95);
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(148,163,184,0.4);
+  color: white;
+  font-size: 14px;
+  width: 260px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  display: none;
+  z-index: 9999;
+">
+  <p style="margin-bottom: 12px;">📞 You can call me on:</p>
+  <strong style="font-size: 16px;">+91 87677 45894</strong>
+  <br><br>
+  <button onclick="closePopup()" style="
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #4f46e5;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+  ">
+    Close
+  </button>
+</div>
+</body>
+</html>
