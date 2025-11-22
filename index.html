@@ -10,6 +10,7 @@
 
   <!-- GSAP for smooth animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
   <style>
     :root {
@@ -102,6 +103,26 @@
     }
     .mascot span {
       transform: translateY(2px);
+    }
+
+    #cursor-glow {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(56, 189, 248, 0.35) 0%,
+        rgba(56, 189, 248, 0.18) 40%,
+        rgba(56, 189, 248, 0.07) 70%,
+        rgba(56, 189, 248, 0) 100%
+      );
+      filter: blur(22px);
+      transform: translate(-50%, -50%);
+      transition: transform 0.06s ease-out;
+      z-index: 9999;
+      mix-blend-mode: screen;
     }
 
     header {
@@ -840,9 +861,7 @@
   <div class="blob blob-2"></div>
 
   <!-- Cursor mascot -->
-  <div class="mascot" id="mascot">
-    <span>👀</span>
-  </div>
+<div id="cursor-glow"></div>
 
   <div class="page">
     <header>
@@ -1317,6 +1336,7 @@
   </div>
 
   <script>
+    emailjs.init("hbpwYlugfeepKEbio"); 
     // Smooth scrolling helper
     function scrollToSection(id) {
       const el = document.getElementById(id);
@@ -1324,12 +1344,12 @@
     }
 
     // Cursor mascot follow
-    const mascot = document.getElementById("mascot");
+    const glow = document.getElementById("cursor-glow");
     window.addEventListener("mousemove", (e) => {
-      const x = e.clientX - 24; // center mascot
-      const y = e.clientY - 24;
-      mascot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      glow.style.left = e.clientX + "px";
+      glow.style.top = e.clientY + "px";
     });
+
 
     // Parallax blobs
     const blob1 = document.querySelector(".blob-1");
@@ -1338,8 +1358,8 @@
       const factor = 0.02;
       const x = (e.clientX - window.innerWidth / 2) * factor;
       const y = (e.clientY - window.innerHeight / 2) * factor;
-      blob1.style.transform = translate(${x}px, ${y}px);
-      blob2.style.transform = translate(${-x}px, ${-y}px);
+      blob1.style.transform = `translate(${x}px, ${y}px)`;
+      blob2.style.transform = `translate(${-x}px, ${-y}px)`;
     });
 
     // GSAP entrance animations
@@ -1393,52 +1413,35 @@
     const statusEl = document.getElementById("status");
     const submitBtn = document.getElementById("submit-btn");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      statusEl.textContent = "";
-      statusEl.className = "status-message";
+    document.getElementById("contact-form").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-      const payload = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        projectType: form.projectType.value,
-        budget: form.budget.value.trim(),
-        message: form.message.value.trim()
-      };
+  document.getElementById("submit-btn").disabled = true;
+  document.getElementById("submit-btn").innerHTML = "Sending...";
 
-      if (!payload.name || !payload.email || !payload.projectType || !payload.message) {
-        statusEl.textContent = "Please fill in all required fields.";
-        statusEl.classList.add("status-error");
-        return;
-      }
+  emailjs.send("service_iozrogz", "template_hppbz2u", {
+    name: form.name.value,
+    email: form.email.value,
+    projectType: form.projectType.value,
+    budget: form.budget.value,
+    message: form.message.value
+  })
+  .then(() => {
+      document.getElementById("status").innerHTML = "Message sent successfully!";
+      document.getElementById("status").classList.add("status-success");
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending...";
+      document.getElementById("contact-form").reset();
+      document.getElementById("submit-btn").disabled = false;
+      document.getElementById("submit-btn").innerHTML = 'Send enquiry <i class="ri-send-plane-2-line"></i>';
+  }, (err) => {
+      document.getElementById("status").innerHTML = "Failed to send. Try again.";
+      document.getElementById("status").classList.add("status-error");
 
-      try {
-        // IMPORTANT: make sure this URL matches your backend deployment
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+      document.getElementById("submit-btn").disabled = false;
+      document.getElementById("submit-btn").innerHTML = 'Send enquiry <i class="ri-send-plane-2-line"></i>';
+  });
+});
 
-        if (res.ok) {
-          statusEl.textContent = "Thank you! Your enquiry is on its way to my inbox.";
-          statusEl.classList.add("status-success");
-          form.reset();
-        } else {
-          throw new Error("Server error");
-        }
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "Something went wrong. You can also email me directly at rugveddhabale@gmail.com.";
-        statusEl.classList.add("status-error");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Send enquiry <i class="ri-send-plane-2-line"></i>';
-      }
-    });
 
     // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
@@ -1484,5 +1487,4 @@ function closePopup() {
   </button>
 </div>
 </body>
-
 </html>
